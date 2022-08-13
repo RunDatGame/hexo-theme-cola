@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo | 小站首页 | Hexo</title>
+  <title>Hexo | 在Vue项目中使用ESLint来检查代码 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
 
@@ -18,7 +18,7 @@
   
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `Hexo | 小站首页`
+    document.title = `Hexo | 在Vue项目中使用ESLint来检查代码`
   </script>
 <meta name="generator" content="Hexo 6.0.0"></head>
 
@@ -336,54 +336,209 @@
 </div></div>
       <div id="main-container" class="main-container">
 
-<div class="index">
-  <div class="index-left">
-    
-      <div class="index-article">
-        <img class="index-article--cover" src="https://s3.bmp.ovh/imgs/2022/04/01/7d831a8e4b739ac2.png" alt="">
-        <div class="index-article--content">
-          <a href="/2022/04/01/%E5%9F%BA%E4%BA%8EVue%E5%AF%B9%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E7%8E%B0/">基于Vue对主题修改的思考与实现 </a>
-          <div>
-            <p>
-              <a class="post-category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
-            </p>
-            <p>
-              <a class="-link" href="/tags/Vue/" rel="tag">Vue</a><span> ◆ </span><a class="-link" href="/tags/CSS/" rel="tag">CSS</a>
-            </p>
+
+  <style>
+pre::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+  background-color:#F5F5F5;
+}
+/*定义滚动条轨道
+内阴影+圆角*/
+pre::-webkit-scrollbar-track {
+  background-color:#F5F5F5;
+}
+/*定义滑块
+内阴影+圆角*/
+pre::-webkit-scrollbar-thumb {
+  background-color: rgb(69, 83, 100);
+}
+
+pre:active {
+  background-color: rgb(81, 95, 116);
+}
+</style>
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">在Vue项目中使用ESLint来检查代码</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          <div class="article-info--categories">
+            <span>分类：</span>
+            <a class="category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
           </div>
-          <div class="bg"></div>
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/ESLint/" rel="tag">ESLint</a><a class="tag-link" href="/tags/Vue/" rel="tag">Vue</a>
+          </div>
+          <p class="article-info--date">日期：2022-03-02 22:34:17</p>
         </div>
+        <img src="https://s3.bmp.ovh/imgs/2022/04/01/647275ce2adecce7.png" alt="" class="article-cover">
       </div>
+    </div>
+    <article class="article-content">
+      <h1 id="在Vue项目中使用ESLint来检查代码"><a href="#在Vue项目中使用ESLint来检查代码" class="headerlink" title="在Vue项目中使用ESLint来检查代码"></a>在Vue项目中使用ESLint来检查代码</h1><blockquote>
+<p>ESLint是基于NodeJS的一个检查语法规则和代码风格的前端插件工具，通过该工具可以让我们在团队合作中制定一个更加统一规范的编码风格。</p>
+</blockquote>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选择一个包管理器来安装，这里我使用<code>npm</code>来安装<code>eslint</code>插件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> --save-dev eslint<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>安装好之后，就可以通过<code>eslint</code>来初始化一个配置文件了，如下执行<code>npx eslint --init</code>一步步勾选：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d7eca00aad94ea2929088e12e0d2f01~tplv-k3u1fbpfcp-zoom-1.image"> 当然上面的选项不是必须一样，可以按照自己的风格来选择，执行完命令之后，可以看到目录下生成了一个<code>.eslintrc.json</code>配置文件，内容如下：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"browser"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"es2021"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"node"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"extends"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"eslint:recommended"</span><span class="token punctuation">,</span>
+    <span class="token string">"plugin:vue/essential"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"parserOptions"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"ecmaVersion"</span><span class="token operator">:</span> <span class="token string">"latest"</span><span class="token punctuation">,</span>
+    <span class="token property">"sourceType"</span><span class="token operator">:</span> <span class="token string">"module"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"vue"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h2><p>现在eslint安装好了，接下来的主要工作就是在<code>.eslintrc.json</code>写配置了，例如语法风格和规则就需要在文件里面的<code>rules</code>里面配置，如下：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"semi"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"warn"</span><span class="token punctuation">,</span> <span class="token string">"never"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上面我配置了一个<code>&quot;semi&quot;: [&quot;warn&quot;, &quot;never&quot;]</code>，就表示代码末尾不用加分号（;），否则就会报出警告（warn）；如下图：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b1fe0c3660b4029b0c235d816a28428~tplv-k3u1fbpfcp-watermark.image" alt="imagepng"> 如果编辑器没有报错的话，查看一下<code>vscode</code>的<code>eslint</code>扩展是否安装了，如果安装也没有报错信息的话，可以进入扩展设置项查看<code>validate</code>项，并设置：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"eslint.validate"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"javascript"</span><span class="token punctuation">,</span>
+    <span class="token string">"javascriptreact"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span> <span class="token property">"language"</span><span class="token operator">:</span> <span class="token string">"vue"</span><span class="token punctuation">,</span> <span class="token property">"autoFix"</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token comment">// 没有就补上</span>
+    <span class="token string">"vue"</span>  <span class="token comment">// 没有就补上</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>设置好了的话，正常情况就可以看到提示信息了。</p>
+<p>解决错误的方式有两种，第一种手动删掉分号（-_-||）；<br>第二种就是通过插件来修复，首先需要安装<code>vuefix</code>插件：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">npm</span> <span class="token function">install</span> --save-dev eslint-plugin-vuefix<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>安装完成之后，在<code>.eslintrc.json</code>注册插件：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"vue"</span><span class="token punctuation">,</span>
+    <span class="token string">"vuefix"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>注册好插件之后，就可以通过执行一下命令来修复问题：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx eslint --fix --debug --ext .js --ext .vue src/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>执行命令后，有问题的文件都会被自动修复，上面表示的意思分别是：</p>
+<ul>
+<li><code>--fix</code>: 执行修复命令</li>
+<li><code>--debug</code>： 打印日志信息，可以不加</li>
+<li><code>--ext</code>：后缀名，上面表示需要修复的文件后缀名为<code>js</code>或者<code>vue</code></li>
+<li><code>src/</code>：需要修复的文件或目录，这里表示<code>src</code>目录</li>
+</ul>
+<p>因为命令比较长，所以可以通过在<code>npm</code>里面添加<code>scripts</code>来方便使用：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"serve"</span><span class="token operator">:</span> <span class="token string">"vue-cli-service serve"</span><span class="token punctuation">,</span>
+  <span class="token property">"build"</span><span class="token operator">:</span> <span class="token string">"vue-cli-service build"</span><span class="token punctuation">,</span>
+  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token string">"npx eslint --fix --ext .js --ext .vue src/"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样，只需要执行<code>npm run lint</code>就可以自动修复问题了。</p>
+<p><strong>以上，就是怎么样在Vue中使用eslint了，当然新建项目的话脚手架直接选择更方便。</strong></p>
+
+    </article>
+    
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="2022/03/02/在Vue项目中使用ESLint来检查代码/" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
     
   </div>
-  <div class="index-center">
-    
-      <div class="index-article">
-        <img class="index-article--cover" src="https://s3.bmp.ovh/imgs/2022/04/01/647275ce2adecce7.png" alt="">
-        <div class="index-article--content">
-          <a href="/2022/03/02/%E5%9C%A8Vue%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E6%9D%A5%E6%A3%80%E6%9F%A5%E4%BB%A3%E7%A0%81/">在Vue项目中使用ESLint来检查代码 </a>
-          <div>
-            <p>
-              <a class="category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
-            </p>
-            <p>
-              <a class="-link" href="/tags/Vue/" rel="tag">Vue</a><span> ◆ </span><a class="-link" href="/tags/ESLint/" rel="tag">ESLint</a>
-            </p>
-          </div>
-          <div class="bg"></div>
-        </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8Vue%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E6%9D%A5%E6%A3%80%E6%9F%A5%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">在Vue项目中使用ESLint来检查代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="toc-number">1.2.</span> <span class="toc-text">配置项</span></a></li></ol></li></ol>
       </div>
-    
-  </div>
-  <div class="index-right">
-    <div class="index-right-wrapper">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/">NodeJS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a></li></ul>
-      <ul class="tags" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/" rel="tag">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022年04月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">2022年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">2022年02月</a><span class="archive-list-count">1</span></li></ul>
+      
+        <div class="catelogue catelogue-2">
+          
+            <p>
+              <span>上一篇：</span>
+              <a href="/2022/03/08/趣味NodeJS之笔趣阁的小蜘蛛/">趣味NodeJS之笔趣阁的小蜘蛛</a>
+            </p>
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2022/02/17/如何使用hexo-theme-cola主题/">如何使用hexo-theme-cola主题</a>
+            </p>
+          
+        </div>
+      
     </div>
   </div>
 </div>
- </div>
+
+
+<script src="/js/prism.js"></script>
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: '2022/03/02/在Vue项目中使用ESLint来检查代码/'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const as = tocs ? tocs.querySelectorAll('a') : []
+    as.forEach(a => {
+      a.addEventListener('click', e => {
+        const href = decodeURIComponent(a.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
+
+</div>
       <div class="main-right-wrapper"><div class="main-right">
   <div class="main-right--board">
     <div class="main-right--title">

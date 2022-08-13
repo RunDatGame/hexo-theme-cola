@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo | 小站首页 | Hexo</title>
+  <title>Hexo | 关于H5新特性拖放API讲解 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
 
@@ -18,7 +18,7 @@
   
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `Hexo | 小站首页`
+    document.title = `Hexo | 关于H5新特性拖放API讲解`
   </script>
 <meta name="generator" content="Hexo 6.0.0"></head>
 
@@ -336,54 +336,227 @@
 </div></div>
       <div id="main-container" class="main-container">
 
-<div class="index">
-  <div class="index-left">
-    
-      <div class="index-article">
-        <img class="index-article--cover" src="https://s3.bmp.ovh/imgs/2022/04/01/7d831a8e4b739ac2.png" alt="">
-        <div class="index-article--content">
-          <a href="/2022/04/01/%E5%9F%BA%E4%BA%8EVue%E5%AF%B9%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E7%8E%B0/">基于Vue对主题修改的思考与实现 </a>
-          <div>
-            <p>
-              <a class="post-category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
-            </p>
-            <p>
-              <a class="-link" href="/tags/Vue/" rel="tag">Vue</a><span> ◆ </span><a class="-link" href="/tags/CSS/" rel="tag">CSS</a>
-            </p>
+
+  <style>
+pre::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+  background-color:#F5F5F5;
+}
+/*定义滚动条轨道
+内阴影+圆角*/
+pre::-webkit-scrollbar-track {
+  background-color:#F5F5F5;
+}
+/*定义滑块
+内阴影+圆角*/
+pre::-webkit-scrollbar-thumb {
+  background-color: rgb(69, 83, 100);
+}
+
+pre:active {
+  background-color: rgb(81, 95, 116);
+}
+</style>
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">关于H5新特性拖放API讲解</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          <div class="article-info--categories">
+            <span>分类：</span>
+            <a class="category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
           </div>
-          <div class="bg"></div>
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/HTML5/" rel="tag">HTML5</a>
+          </div>
+          <p class="article-info--date">日期：2022-03-24 23:22:38</p>
         </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
       </div>
+    </div>
+    <article class="article-content">
+      <blockquote>
+<p>HTML5出来了许多的新特性，拖放就是其中比较有用的特性之一，可以应用到许多业务场景中去，通过这个新特性，我们也可以实现许多有趣的例子。</p>
+</blockquote>
+<p>先看一个通过拖放实现的小Demo：</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/225149073fd14048aa2914014049e538~tplv-k3u1fbpfcp-watermark.image" alt="nicef.gif"></p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>拖放是H5的新特性，即抓取对象以后拖到另一个位置，但是前提是这个元素设置了属性<code>draggable=true</code>，才能让该元素具有拖放功能。</p>
+<p>拖放具有三个过程，即：<br><code>开始拖动</code> -&gt; <code>拖动中</code> -&gt; <code>放置元素</code>  </p>
+<ul>
+<li>开始拖动：指触发拖动的元素的过程，比如轻按元素时；</li>
+<li>拖动中：移动拖动中的元素；</li>
+<li>放置元素：把拖动的元素，放置到另一个元素里面的过程。</li>
+</ul>
+<p>在不同的阶段，都有其相对应的<code>API</code>，下面我们就看看这些<code>API</code>。</p>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>H5的拖放有如下6个<code>API</code>供使用：  </p>
+<ul>
+<li><code>ondragstart</code></li>
+<li><code>ondrag</code></li>
+<li><code>ondragend</code></li>
+<li><code>ondragenter</code></li>
+<li><code>ondragover</code></li>
+<li><code>ondrop</code><br>上面可以看到我写这些<code>API</code>分两种情况，前三个是<strong>拖动的元素对应的API</strong>，后三个是<strong>放置的元素的API</strong>。</li>
+</ul>
+<p>例如：我要把<code>div#box1</code>拖动到<code>div#box2</code>，那么<code>div#box1</code>就该监听<code>dragstart</code>和<code>dragend</code>，而<code>div#box2</code>就监听另外三个。  </p>
+<table>
+<thead>
+<tr>
+<th align="center">对象</th>
+<th align="center">事件</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">拖动的元素</td>
+<td align="center">dragstart</td>
+<td align="center">触发拖动时就会执行</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">drag</td>
+<td align="center">触发拖动后拖动元素过程触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">dragend</td>
+<td align="center">拖动结束后触发</td>
+</tr>
+<tr>
+<td align="center">放置的元素</td>
+<td align="center">dragenter</td>
+<td align="center">当拖动的元素进入绑定的元素区域里就会触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">dragover</td>
+<td align="center">当拖动的元素在放置的元素区域里移动就会触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">drop</td>
+<td align="center">当拖动的元素在放置的元素区域里释放就会触发</td>
+</tr>
+</tbody></table>
+<p><strong>注意：<code>drop</code>事件在一些浏览器上可能不会触发，这时需要在<code>dragover</code>和<code>drop</code>事件里面阻止浏览器默认事件：</strong></p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'dragover'</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    e<span class="token punctuation">.</span><span class="token function">preventDfault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'drop'</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    e<span class="token punctuation">.</span><span class="token function">preventDfault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>另外，拖动移入移出的判定是通过鼠标的位置，而不是拖动的元素的位置。</strong></p>
+<h3 id="事件顺序："><a href="#事件顺序：" class="headerlink" title="事件顺序："></a>事件顺序：</h3><ul>
+<li>拖动时（未进入放置元素区域）：<br><code>ondragstart</code> -&gt; <code>ondrag</code> -&gt; <code>ondragend</code></li>
+<li>拖动时（进入放置元素区域）：<br><code>ondragstart</code> -&gt; <code>ondragenter</code> -&gt; <code>ondragover</code> -&gt; <code>ondrag</code> -&gt; <code>ondrop</code> -&gt; <code>ondragend</code></li>
+</ul>
+<h2 id="数据传递"><a href="#数据传递" class="headerlink" title="数据传递"></a>数据传递</h2><p>元素拖放的过程，往往是需要数据传递的，比如放置时要获取拖动元素的状态，其中就可以通过<code>dataTransfer</code>这个对象来传递数据。</p>
+<p>通过在<code>dragstart</code>开始阶段设置状态，然后再<code>drop</code>时获取状态，再进行其他操作。</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'dragstart'</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    e<span class="token punctuation">.</span>dataTransfer<span class="token punctuation">.</span><span class="token function">setData</span><span class="token punctuation">(</span><span class="token string">'msg'</span><span class="token punctuation">,</span> <span class="token string">'hello'</span><span class="token punctuation">)</span>
+    <span class="token comment">// 传递对象</span>
+    <span class="token comment">// e.dataTransfer.setData('greet', JSON.stringify(&#123; msg1: 'hello', msg2: 'good morning' &#125;))</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'drop'</span><span class="token punctuation">,</span> <span class="token parameter">e</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> msg <span class="token operator">=</span> e<span class="token punctuation">.</span>dataTransfer<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token string">'msg'</span><span class="token punctuation">)</span>
+    <span class="token comment">// TODO</span>
+    e<span class="token punctuation">.</span><span class="token function">preventDfault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>注意，这里的<code>setData</code>只能设置字符串，如果是对象的话，请通过<code>JSON.stringify</code>来序列化。</p>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e303034363424ab680e1c57353c69077~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p>兼容性还是存在一些问题，具体可以看看<a target="_blank" rel="noopener" href="https://www.caniuse.com/?search=drag">caniuse</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果觉得写原生拖动麻烦，这里还推荐再次封装过的<a target="_blank" rel="noopener" href="https://github.com/SortableJS/Sortable">sortable.js</a>库，功能强大，使用也不难；  </p>
+<p>拖动这个特性的应用还是比较广泛的，但因为是<code>H5</code>新特性，兼容在一些浏览器上还是存在一定问题，所以依据项目情况使用。  </p>
+<p>这里也介绍的全是基础用法，详细的可以去看看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API">MDN文档</a>。</p>
+
+    </article>
+    
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="2022/03/24/关于H5新特性拖放API讲解/" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
     
   </div>
-  <div class="index-center">
-    
-      <div class="index-article">
-        <img class="index-article--cover" src="https://s3.bmp.ovh/imgs/2022/04/01/647275ce2adecce7.png" alt="">
-        <div class="index-article--content">
-          <a href="/2022/03/02/%E5%9C%A8Vue%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E6%9D%A5%E6%A3%80%E6%9F%A5%E4%BB%A3%E7%A0%81/">在Vue项目中使用ESLint来检查代码 </a>
-          <div>
-            <p>
-              <a class="category-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a>
-            </p>
-            <p>
-              <a class="-link" href="/tags/Vue/" rel="tag">Vue</a><span> ◆ </span><a class="-link" href="/tags/ESLint/" rel="tag">ESLint</a>
-            </p>
-          </div>
-          <div class="bg"></div>
-        </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">事件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E9%A1%BA%E5%BA%8F%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">事件顺序：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92"><span class="toc-number">3.</span> <span class="toc-text">数据传递</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
-    
-  </div>
-  <div class="index-right">
-    <div class="index-right-wrapper">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/">NodeJS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web%E5%89%8D%E7%AB%AF/">Web前端</a></li></ul>
-      <ul class="tags" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/" rel="tag">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022年04月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">2022年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">2022年02月</a><span class="archive-list-count">1</span></li></ul>
+      
+        <div class="catelogue catelogue-2">
+          
+            <p>
+              <span>上一篇：</span>
+              <a href="/2022/04/01/基于Vue对主题修改的思考与实现/">基于Vue对主题修改的思考与实现</a>
+            </p>
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2022/03/08/趣味NodeJS之笔趣阁的小蜘蛛/">趣味NodeJS之笔趣阁的小蜘蛛</a>
+            </p>
+          
+        </div>
+      
     </div>
   </div>
 </div>
- </div>
+
+
+<script src="/js/prism.js"></script>
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: '2022/03/24/关于H5新特性拖放API讲解/'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const as = tocs ? tocs.querySelectorAll('a') : []
+    as.forEach(a => {
+      a.addEventListener('click', e => {
+        const href = decodeURIComponent(a.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
+
+</div>
       <div class="main-right-wrapper"><div class="main-right">
   <div class="main-right--board">
     <div class="main-right--title">
