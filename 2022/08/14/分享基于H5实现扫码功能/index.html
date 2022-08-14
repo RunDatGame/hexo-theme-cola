@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo | 在Vue项目中使用ESLint来检查代码 | Hexo</title>
+  <title>Hexo | 分享基于H5实现扫码功能 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
 
@@ -18,7 +18,7 @@
   
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `Hexo | 在Vue项目中使用ESLint来检查代码`
+    document.title = `Hexo | 分享基于H5实现扫码功能`
   </script>
 <meta name="generator" content="Hexo 6.0.0"></head>
 
@@ -361,7 +361,7 @@ pre:active {
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">在Vue项目中使用ESLint来检查代码</h1>
+    <h1 class="article-title">分享基于H5实现扫码功能</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
@@ -371,96 +371,87 @@ pre:active {
           </div>
           <div class="article-info--tags">
             <span>标签：</span>
-            <a class="tag-link" href="/tags/ESLint/" rel="tag">ESLint</a><a class="tag-link" href="/tags/Vue/" rel="tag">Vue</a>
+            <a class="tag-link" href="/tags/HTML5/" rel="tag">HTML5</a>
           </div>
-          <p class="article-info--date">日期：2022-03-02 22:34:17</p>
+          <p class="article-info--date">日期：2022-08-14 22:33:34</p>
         </div>
-        <img src="https://s3.bmp.ovh/imgs/2022/04/01/647275ce2adecce7.png" alt="" class="article-cover">
+        <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9c64349191a94bf19bcaeb14a62d328c~tplv-k3u1fbpfcp-zoom-crop-mark:3024:3024:3024:1702.awebp?" alt="" class="article-cover">
       </div>
     </div>
     <article class="article-content">
-      <h1 id="在Vue项目中使用ESLint来检查代码"><a href="#在Vue项目中使用ESLint来检查代码" class="headerlink" title="在Vue项目中使用ESLint来检查代码"></a>在Vue项目中使用ESLint来检查代码</h1><blockquote>
-<p>ESLint是基于NodeJS的一个检查语法规则和代码风格的前端插件工具，通过该工具可以让我们在团队合作中制定一个更加统一规范的编码风格。</p>
+      <blockquote>
+<p>分享仅仅只是通过使用第三方库来实现基于H5页面的扫码功能，而不会去从<code>navigator.mediaDevices.getUserMedia</code>这个新的<code>Api</code>来一步步开发。</p>
 </blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选择一个包管理器来安装，这里我使用<code>npm</code>来安装<code>eslint</code>插件：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> --save-dev eslint<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>安装好之后，就可以通过<code>eslint</code>来初始化一个配置文件了，如下执行<code>npx eslint --init</code>一步步勾选：</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d7eca00aad94ea2929088e12e0d2f01~tplv-k3u1fbpfcp-zoom-1.image"> 当然上面的选项不是必须一样，可以按照自己的风格来选择，执行完命令之后，可以看到目录下生成了一个<code>.eslintrc.json</code>配置文件，内容如下：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"browser"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token property">"es2021"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token property">"node"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"extends"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"eslint:recommended"</span><span class="token punctuation">,</span>
-    <span class="token string">"plugin:vue/essential"</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"parserOptions"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"ecmaVersion"</span><span class="token operator">:</span> <span class="token string">"latest"</span><span class="token punctuation">,</span>
-    <span class="token property">"sourceType"</span><span class="token operator">:</span> <span class="token string">"module"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"vue"</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h2><p>现在eslint安装好了，接下来的主要工作就是在<code>.eslintrc.json</code>写配置了，例如语法风格和规则就需要在文件里面的<code>rules</code>里面配置，如下：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"semi"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"warn"</span><span class="token punctuation">,</span> <span class="token string">"never"</span><span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>上面我配置了一个<code>&quot;semi&quot;: [&quot;warn&quot;, &quot;never&quot;]</code>，就表示代码末尾不用加分号（;），否则就会报出警告（warn）；如下图：</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b1fe0c3660b4029b0c235d816a28428~tplv-k3u1fbpfcp-watermark.image" alt="imagepng"> 如果编辑器没有报错的话，查看一下<code>vscode</code>的<code>eslint</code>扩展是否安装了，如果安装也没有报错信息的话，可以进入扩展设置项查看<code>validate</code>项，并设置：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"eslint.validate"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"javascript"</span><span class="token punctuation">,</span>
-    <span class="token string">"javascriptreact"</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span> <span class="token property">"language"</span><span class="token operator">:</span> <span class="token string">"vue"</span><span class="token punctuation">,</span> <span class="token property">"autoFix"</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token comment">// 没有就补上</span>
-    <span class="token string">"vue"</span>  <span class="token comment">// 没有就补上</span>
-<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>设置好了的话，正常情况就可以看到提示信息了。</p>
-<p>解决错误的方式有两种，第一种手动删掉分号（-_-||）；<br>第二种就是通过插件来修复，首先需要安装<code>vuefix</code>插件：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">npm</span> <span class="token function">install</span> --save-dev eslint-plugin-vuefix<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>安装完成之后，在<code>.eslintrc.json</code>注册插件：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"vue"</span><span class="token punctuation">,</span>
-    <span class="token string">"vuefix"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>注册好插件之后，就可以通过执行一下命令来修复问题：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx eslint --fix --debug --ext .js --ext .vue src/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>执行命令后，有问题的文件都会被自动修复，上面表示的意思分别是：</p>
+<p>如果对实现<code>H5</code>的扫码实现感兴趣的话，可以去看看：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia">navigator.mediaDevices.getUserMedia</a> 相关的MDN文档。</p>
+<h2 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h2><p>先来说说<code>H5</code>的扫码常用梁红使用场景，这里列举两种比较长哟的：<br>一种就是直接打开浏览器来进行扫码，这种就需要基于<code>H5</code>的原生功能来实现；<br>而另一种的话就是通过微信内置浏览器打开<code>H5</code>页面来进行调用微信的<code>SDK</code>实现扫码（当然也可以用<code>H5</code>原生功能实现）。</p>
+<h2 id="基于H5来实现扫码"><a href="#基于H5来实现扫码" class="headerlink" title="基于H5来实现扫码"></a>基于H5来实现扫码</h2><p>这里我们需要使用别人封装好的一个<code>H5</code>扫码库：<a target="_blank" rel="noopener" href="https://github.com/mebjas/html5-qrcode">html5-qrcode</a>，这个库分为两种使用方式：</p>
 <ul>
-<li><code>--fix</code>: 执行修复命令</li>
-<li><code>--debug</code>： 打印日志信息，可以不加</li>
-<li><code>--ext</code>：后缀名，上面表示需要修复的文件后缀名为<code>js</code>或者<code>vue</code></li>
-<li><code>src/</code>：需要修复的文件或目录，这里表示<code>src</code>目录</li>
+<li><code>Html5QrcodeScanner</code>： 默认带有UI到扫描功能，使用非常简单；</li>
+<li><code>Html5Qrcode</code>：更灵活的扫描功能，没有默认的UI界面，自定义性更强。</li>
 </ul>
-<p>因为命令比较长，所以可以通过在<code>npm</code>里面添加<code>scripts</code>来方便使用：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">"serve"</span><span class="token operator">:</span> <span class="token string">"vue-cli-service serve"</span><span class="token punctuation">,</span>
-  <span class="token property">"build"</span><span class="token operator">:</span> <span class="token string">"vue-cli-service build"</span><span class="token punctuation">,</span>
-  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token string">"npx eslint --fix --ext .js --ext .vue src/"</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><strong>注意</strong><br>因为扫码需要调起手机摄像头功能，而这是一个比较隐私的功能，所以需要部署的网站是<code>https</code>协议的或者使用本地<code>localhost</code>也可以，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MDN文档说明</a>。</p>
+</blockquote>
+<p>这是官网<code>Html5QrcodeScanner</code>实现的二维码扫描样例：  </p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a56bd5465067488389e672b596657dbd~tplv-k3u1fbpfcp-watermark.image" alt="pixel4_barcode_480.gif"></p>
+<p>可以看到，这样的UI并不适合于我们开发使用（除非你或者老板觉得很Nice！），所以我们就得需要使用<code>Html5Qrcode</code>的方式来实现二维码扫描功能了。</p>
+<p>使用<code>Html5Qrcode</code>来实现二维码扫描也非常的简单，通过官网的代码例子即可实现，代码如下：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Html5Qrcode <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"html5-qrcode"</span>
 
-<p>这样，只需要执行<code>npm run lint</code>就可以自动修复问题了。</p>
-<p><strong>以上，就是怎么样在Vue中使用eslint了，当然新建项目的话脚手架直接选择更方便。</strong></p>
+<span class="token keyword">const</span> html5QrCode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Html5Qrcode</span><span class="token punctuation">(</span><span class="token string">"reader"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token function-variable function">qrCodeSuccessCallback</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">decodedText<span class="token punctuation">,</span> decodedResult</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">fps</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token literal-property property">qrbox</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">width</span><span class="token operator">:</span> <span class="token number">250</span><span class="token punctuation">,</span> <span class="token literal-property property">height</span><span class="token operator">:</span> <span class="token number">250</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+html5QrCode<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">facingMode</span><span class="token operator">:</span> <span class="token string">"environment"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> config<span class="token punctuation">,</span> qrCodeSuccessCallback<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token parameter">err</span> <span class="token operator">=></span> err<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol>
+<li><p>通过给<code>Html5Qrcode</code>传入一个<code>ID</code>选择器来创建对应<code>DOM</code>节点的对象，然后通过<code>start</code>方法即可打开手机的摄像头来实现扫码功能（会弹出授权框）。</p>
+</li>
+<li><p>其中，<code>facingMode</code>表示开启的是前置摄像后还是后置摄像后，其中<code>environment</code>表示打开后置摄像后即对着环境扫描，而<code>user</code>表示打开前置摄像头，即照自己。</p>
+</li>
+<li><p>当扫描成功后，会执行<code>qrCodeSucccessCallback</code>的回调方法，参数有两个：<code>decodedText</code>和<code>decodedResult</code>；其中<code>decodedText</code>是二维码扫描的结果值，<code>decodeResult</code>则是一个扫描成功后返回的对象并包含前者。</p>
+</li>
+</ol>
+<h2 id="基于微信SDK来扫描"><a href="#基于微信SDK来扫描" class="headerlink" title="基于微信SDK来扫描"></a>基于微信SDK来扫描</h2><p>当通过微信的内置浏览器打开H5页面时，此时是可以通过微信SDK来调用微信的二维码扫描功能的，这种方式相比于原生H5体验会更加的好。</p>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><p>使用微信SDK的话，需要服务端来配合，首先看服务端怎么使用：</p>
+<ol>
+<li><p>首先在 <code>设置与开发-&gt;公众号设置-&gt;功能设置-&gt;JS接口安全域名</code> 中下载的指定文件并填写对应的服务器目录里面，再填写对应的域名即可配置成功；</p>
+</li>
+<li><p>通过<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#62">签名算法</a>来生成对应的签名，一定要好好阅读不然很容易出错；</p>
+</li>
+<li><p>把生成的签名通过接口返回。</p>
+</li>
+</ol>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>当服务端完成配置后，客户端需要下载对应的<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#3">JSSDK</a>，引入完成后，通过一下代码即可初始化配置：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js">wx<span class="token punctuation">.</span><span class="token function">ready</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    wx<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">debug</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// 开启调试模式,调用的所有 api 的返回值会在客户端 alert 出来，若要查看传入的参数，可以在 pc 端打开，参数信息会通过 log 打出，仅在 pc 端时才会打印。</span>
+      <span class="token literal-property property">appId</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token comment">// 必填，公众号的唯一标识</span>
+      <span class="token literal-property property">timestamp</span><span class="token operator">:</span> <span class="token punctuation">,</span> <span class="token comment">// 必填，生成签名的时间戳</span>
+      <span class="token literal-property property">nonceStr</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token comment">// 必填，生成签名的随机串</span>
+      <span class="token literal-property property">signature</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span><span class="token comment">// 必填，签名</span>
+      <span class="token literal-property property">jsApiList</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">// 必填，需要使用的 JS 接口列表</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面的参数，除了<code>timestamp</code>和<code>nonceStr</code>还有<code>signature</code>字段都是通过服务端返回的，完成以上步骤后，通过调用对应<code>API</code>即可实现二维码扫描功能：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js">wx<span class="token punctuation">.</span><span class="token function">scanQRCode</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">needResult</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// 默认为0，扫描结果由微信处理，1则直接返回扫描结果，</span>
+  <span class="token literal-property property">scanType</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"qrCode"</span><span class="token punctuation">,</span><span class="token string">"barCode"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 可以指定扫二维码还是一维码，默认二者都有</span>
+  <span class="token function-variable function">success</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">res</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">var</span> result <span class="token operator">=</span> res<span class="token punctuation">.</span>resultStr<span class="token punctuation">;</span> <span class="token comment">// 当needResult 为 1 时，扫码返回的结果</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>效果图如下：</p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6a85ac6cae634847a862b4145f6e6a2d~tplv-k3u1fbpfcp-watermark.image" alt="demo11.gif"></p>
+<p>以上，就是通过<code>H5</code>实现二维码功能的小分享了，并没有去研究原生的<code>API</code>来实现，而是使用的第三方库，这样对于业务开发来更加快速一点，而想了解实现原理的可以去了解。</p>
+<p>至此，分享就到此结束啦:)</p>
 
     </article>
     
     <div class="read-nums">
       <!-- id 将作为查询条件 -->
-      <span id="2022/03/02/在Vue项目中使用ESLint来检查代码/" class="leancloud_visitors" data-flag-title="Your Article Title">
+      <span id="2022/08/14/分享基于H5实现扫码功能/" class="leancloud_visitors" data-flag-title="Your Article Title">
         <em class="post-meta-item-text">浏览量</em>
         <i class="leancloud-visitors-count"></i>
       </span>
@@ -476,20 +467,15 @@ pre:active {
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8Vue%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E6%9D%A5%E6%A3%80%E6%9F%A5%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">在Vue项目中使用ESLint来检查代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="toc-number">1.2.</span> <span class="toc-text">配置项</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">功能介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EH5%E6%9D%A5%E5%AE%9E%E7%8E%B0%E6%89%AB%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">基于H5来实现扫码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%BE%AE%E4%BF%A1SDK%E6%9D%A5%E6%89%AB%E6%8F%8F"><span class="toc-number">3.</span> <span class="toc-text">基于微信SDK来扫描</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">3.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">3.2.</span> <span class="toc-text">客户端</span></a></li></ol></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
-          
-            <p>
-              <span>上一篇：</span>
-              <a href="/2022/03/08/趣味NodeJS之笔趣阁的小蜘蛛/">趣味NodeJS之笔趣阁的小蜘蛛</a>
-            </p>
            
           
             <p>
               <span>下一篇</span>
-              <a href="/2022/02/17/如何使用hexo-theme-cola主题/">如何使用hexo-theme-cola主题</a>
+              <a href="/2022/04/01/基于Vue对主题修改的思考与实现/">基于Vue对主题修改的思考与实现</a>
             </p>
           
         </div>
@@ -512,7 +498,7 @@ pre:active {
     recordIP: config.recordIP,
     visitor: config.visitor,
     enableQQ: config.enableQQ,
-    path: '2022/03/02/在Vue项目中使用ESLint来检查代码/'
+    path: '2022/08/14/分享基于H5实现扫码功能/'
   })
 </script>
 
